@@ -21,8 +21,13 @@ use App\Http\Controllers\MoviesController;
 // Route::get('/', function () {
 //     return view('index');
 // });
-Route::get('/', [MoviesController::class, 'index']);
+// Route::get('/', [MoviesController::class, 'index']);
 Route::get('/movies/{id}', [MoviesController::class, 'show']);
+Route::get('/movies', [MoviesController::class, 'index']);
+Route::get(
+    '/',
+    [MoviesController::class, 'index']
+)->name('movies');
 
 // Route::get('/', 'MoviesController@index')->name('movies.index');
 // Route::get('/', 'UserController@index')->name('user');
