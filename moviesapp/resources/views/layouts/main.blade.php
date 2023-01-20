@@ -9,6 +9,7 @@
     @vite('resources/css/app.css')
     @livewireStyles
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <!-- The "defer" attribute is important to make sure Alpine waits for Livewire to load first. -->
 </head>
 
@@ -23,7 +24,7 @@
                 </li>
 
                 <li class="md:ml-16">
-                    <a href="/movies" class="hover:text-gray-300"> Movies </a>
+                    <a href="{{ route('movies.index') }}" class="hover:text-gray-300"> Movies </a>
                 </li>
 
                 <li class="md:ml-6">

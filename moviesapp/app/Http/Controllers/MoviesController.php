@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Models\Comments;
+use DB;
 
 class MoviesController extends Controller
 {
@@ -13,35 +15,31 @@ class MoviesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+        {
+            $popularMovies = $this->getDataFromApi('https://api.themoviedb.org/3/movie/popular');
+            $nowPlayingMovies = $this->getDataFromApi('https://api.themoviedb.org/3/movie/now_playing');
+            $genreArray = $this->getDataFromApi('https://api.themoviedb.org/3/genre/movie/list');
+            $genres = collect($genreArray)->mapWithKeys(function($genre) {
+                return [$genre['id'] => $genre['name']];
+            });
 
-        $popularMovies = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/movie/popular')
-        ->json()['results'];
+            return view('movies.index', [
+                'popularMovies' => $popularMovies,
+                'nowPlayingMovies' => $nowPlayingMovies,
+                'genres' => $genres,
+            ]);
+        }
 
-        $nowPlayingMovies = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/movie/now_playing')
-        ->json()['results'];
+        private function getDataFromApi($endpoint)
+        {
+            try {
+                $response = Http::withToken(config('services.tmdb.token'))->get($endpoint)->json();
+                return $response['results'];
+            } catch (\Exception $e) {
+                // handle error and return proper response
+            }
+        }
 
-        $genreArray = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/genre/movie/list')
-        ->json()['genres'];
-        // $popularMovies = Http::get('https://api.themoviedb.org/3/movie/popular', [
-        //     'query' => ['Token' => 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMDc1YzU0NzBmNTk4MmRjNmI1OTNlYWMzYWYzZWIyNiIsInN1YiI6IjYzYjkxYjcxNmQ2NzVhMDA4YTI4NGNiNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3fxj-llr4QJkDs2wmSTK_PxB602qAAHViEkAlK85VrY'],
-        //     'headers' => ['Accept' => 'application/json']
-        // ]);
-        $genres = collect ($genreArray)->mapWithKeys(function($genre){
-            return [$genre['id'] => $genre['name']];
-        });
-
-        return view('index', [
-            'popularMovies' => $popularMovies,
-            'nowPlayingMovies' => $nowPlayingMovies,
-            'genres' => $genres,
-
-        ]
-    );
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -75,11 +73,18 @@ class MoviesController extends Controller
         $movie = Http::withToken(config('services.tmdb.token'))
         ->get('https://api.themoviedb.org/3/movie/'.$id.'?append_to_response=credits,videos,images')
         ->json();
-        return view ('show',[
+
+        // $fetchinitialcomments = Comments::all();
+
+        // $fetchinitialcomments = DB::table('comments')->pluck('body','user_id');
+
+        return view ('movies.show',[
             'movie' => $movie,
+            // 'comments'=> $fetchinitialcomments,
         ]);
         
     }
+
 
     /**
      * Show the form for editing the specified resource.

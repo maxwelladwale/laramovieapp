@@ -14,24 +14,6 @@ use App\Http\Controllers\MoviesController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-// Route::get('/', function () {
-//     return view('index');
-// });
-// Route::get('/', [MoviesController::class, 'index']);
-Route::get('/movies/{id}', [MoviesController::class, 'show']);
-Route::get('/movies', [MoviesController::class, 'index']);
-Route::get(
-    '/',
-    [MoviesController::class, 'index']
-)->name('movies');
-
-// Route::get('/', 'MoviesController@index')->name('movies.index');
-// Route::get('/', 'UserController@index')->name('user');
-// Route::get('/movies/{id}', 'MoviesController@show')->name('movies.show');
-
-// Route::view('/', 'index');
-// Route::view('/movies', 'show');
+Route::get('/', [MoviesController::class, 'index'])->name('index');
+Route::get('/movies', [MoviesController::class, 'index'])->name('movies.index');
+Route::get('/movies/{id}', [MoviesController::class, 'show'])->name('movies.show');

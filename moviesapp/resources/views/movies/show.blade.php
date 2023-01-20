@@ -103,8 +103,7 @@
                             <div class="mt-8">
                                 
                                 <img src="{{'https://image.tmdb.org/t/p/w500/' . $item['file_path']}}" alt="" class="hover:opacity-75 transition ease-in-out duration-150">
-                                {{-- <p>{{ $item[]}}</p>
-                                <p>{{ $item[]}}</p> --}}
+                                
 
                             </div>
                         @endif
@@ -113,4 +112,10 @@
             </div>
         </div>
     </div>
+
+    {{-- comment section --}}
+    <livewire:comments />
+
+    {{-- <livewire:comments/> --}}
+    {{-- comment section end --}}
 @endsection
