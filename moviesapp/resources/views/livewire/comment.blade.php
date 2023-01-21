@@ -1,4 +1,25 @@
 <div>
+    <form wire:submit.prevent="storeImage">
+
+        @if ($photo)
+    
+            Photo Preview:
+    
+            <img src="{{ $photo->temporaryUrl() }}" width='200'>
+    
+        @endif
+
+    
+        <input type="file" wire:model="photo">
+
+        @error('photo') <span class="error">{{ $message }}</span> @enderror
+
+        <button type="submit">Save Photo</button>
+    
+    </form>
+
+    <div wire:loading wire:target="photo">Uploading...</div>
+
     <h1 class="text-3xl">Comments</h1>
     @error('newComment') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
     <div>
@@ -35,9 +56,12 @@
                 wire:click="remove({{$comment->id}})"></i>
         </div>
         <p class="text-gray-800">{{$comment->body}}</p>
-        {{-- @if($comment->image)
-        <img src="{{$comment->imagePath}}" />
-        @endif --}}
+        @if($comment->image)
+
+        <img src="
+        {{ URL::asset('storage/app/files/'. $comment->image) }}"/>
+        
+        @endif
     </div>
     @endforeach
 
