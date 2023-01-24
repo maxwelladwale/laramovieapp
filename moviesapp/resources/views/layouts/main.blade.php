@@ -34,7 +34,18 @@
                 <li class="md:ml-6">
                     <a href="#" class="hover:text-gray-300"> Actors </a>
                 </li>
-
+                <li class="md:ml-16">
+                    <a href="{{ route('maps') }}" class="hover:text-gray-300"> Maps </a>
+                </li>
+                @auth
+        <livewire:logout />
+        @endauth
+        @guest
+        <div class="py-4">
+            <a class="mx-3" href="/login">Login</a>
+            <a class="mx-3" href="/register">Register</a>
+        </div>
+        @endguest
             </ul>
 
             <div class="flex items-center">

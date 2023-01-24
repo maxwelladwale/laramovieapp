@@ -38,10 +38,18 @@ class Comments extends Component
 
     public function addComment(){
         $this->validate(['newComment' => 'required|max:255']);
-        // $this->file->store('files', 'public');
-        $this->storeImage();
 
-        $createdComment  =  \App\Models\Comments::create(['body' => $this->newComment, 'image'=> $this->photo->getClientOriginalName(), 'user_id'=>1]);
+        $this->validate([
+            'photo' => 'image|max:1024',
+          ]);
+      
+          $name = md5($this->photo . microtime()).'.'.$this->photo->extension();
+      
+          $this->photo->storeAs('photos', $name);
+        // $this->file->store('files', 'public');
+        // $this->storeImage();
+
+        $createdComment  =  \App\Models\Comments::create(['body' => $this->newComment, 'image'=> $name, 'user_id'=>1]);
         
 
         $this->newComment = "";
@@ -59,32 +67,40 @@ class Comments extends Component
 
 
 
-    public function savephoto()
+    // public function savephoto()
 
-    {
+    // {
 
-        $this->validate([
+    //     $this->validate([
 
-            'photo' => 'image|max:1024', // 1MB Max
+    //         'photo' => 'image|max:1024', // 1MB Max
 
-        ]);
+    //     ]);
 
-        $php =$this->photo;
-        // dd($php);
-        $this->photo->store('photos');
+    //     $php =$this->photo;
+    //     // dd($php);
+    //     $this->photo->store('photos');
 
-    }
+    // }
 
-    public function storeImage(){
-        if (!$this->photo) {
-            return null;
-        }
-        // dd($this->photo->getClientOriginalName());
-        $filename = $this->photo->getClientOriginalName();
-        $this->photo->storeAs('files',  $filename);
+    // public function storeImage(){
+    //     if (!$this->photo) {
+    //         return null;
+    //     }
+    //     // dd($this->photo->getClientOriginalName());
+    //     // $filename = $this->photo->getClientOriginalName();
+    //     // $this->photo->storeAs('files',  $filename);
+    //     // $validatedData['image'] = $this->photo->store('files', 'public');
+    //     // \App\Models\Comments::create($validatedData);
         
-    // Storage::disk('local')->put($path, file_get_contents($request->file));
-    }
+        
+    // //   dd($name);
+    //     //   Comments::create(['file_name' => $name]);
+      
+    //       session()->flash('message', 'The photo is successfully uploaded!');
+    //     //   return $name;
+    // // Storage::disk('local')->put($path, file_get_contents($request->file));
+    // }
 
 
     public function render()
